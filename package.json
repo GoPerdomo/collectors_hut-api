@@ -1,0 +1,30 @@
+{
+  "name": "collectors-backend",
+  "version": "1.0.0",
+  "description": "A social network for collectors",
+  "main": "server.js",
+  "scripts": {
+    "test": "tape ./tests/test.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoPerdomo/collectors_backend.git"
+  },
+  "keywords": [
+    "social network"
+  ],
+  "author": "Gabriel de O. Perdomo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GoPerdomo/collectors_backend/issues"
+  },
+  "homepage": "https://github.com/GoPerdomo/collectors_backend#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.13.5"
+  },
+  "devDependencies": {
+    "tap-spec": "^4.1.1",
+    "tape": "^4.8.0"
+  }
+}
