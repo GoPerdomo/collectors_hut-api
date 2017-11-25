@@ -4,7 +4,7 @@
   "description": "A social network for collectors",
   "main": "server.js",
   "scripts": {
-    "test": "tape ./tests/test.js | tap-spec"
+    "models-test": "tape ./tests/models.test.js | tap-spec"
   },
   "repository": {
     "type": "git",
