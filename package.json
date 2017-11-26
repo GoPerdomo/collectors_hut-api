@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon ./src/server.js",
     "schemas-tests": "tape ./tests/schemas.test.js | tap-spec",
-    "database-tests": "tape ./tests/database.test.js | tap-spec"
+    "database-tests": "tape ./tests/database.test.js | tap-spec",
+    "controller-tests": "tape ./tests/controllers.test.js | tap-spec"
   },
   "repository": {
     "type": "git",
