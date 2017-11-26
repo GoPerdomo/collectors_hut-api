@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon ./src/server.js",
-    "models-test": "tape ./tests/models.test.js | tap-spec"
+    "schemas-tests": "tape ./tests/schemas.test.js | tap-spec",
+    "database-tests": "tape ./tests/database.test.js | tap-spec"
   },
   "repository": {
     "type": "git",

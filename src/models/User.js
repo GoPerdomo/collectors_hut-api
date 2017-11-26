@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  picture: {
+  photo: {
     type: String,
     default: "http://www.atwoodz.com/wp-content/uploads/2013/08/question-mark.jpe"
   },
