@@ -4,7 +4,9 @@
   "description": "A social network for collectors",
   "main": "server.js",
   "scripts": {
-    "models-test": "tape ./tests/models.test.js | tap-spec"
+    "start": "nodemon ./src/server.js",
+    "schemas-tests": "tape ./tests/schemas.test.js | tap-spec",
+    "database-tests": "tape ./tests/database.test.js | tap-spec"
   },
   "repository": {
     "type": "git",
