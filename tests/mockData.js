@@ -1,4 +1,4 @@
-const userData = {
+const mockUser = {
   firstName: "John",
   lastName: "Userman",
   photo: "https://d30y9cdsu7xlg0.cloudfront.net/png/17241-200.png",
@@ -11,12 +11,12 @@ const userData = {
   newPassword: "moresecret",
 };
 
-const collectionData = {
+const mockCollection = {
   name: "Coins",
   newName: "Stamps",
 };
 
-const itemData = {
+const mockItem = {
   name: "Cool Item",
   photo: "https://image.flaticon.com/icons/svg/217/217853.svg",
   description: "Rare cool item",
@@ -27,6 +27,9 @@ const itemData = {
   newItemExtraInfo: "Some super extra info",
 };
 
-module.exports.userData = userData;
-module.exports.collectionData = collectionData;
-module.exports.itemData = itemData;
+
+module.exports = {
+  mockUser,
+  mockCollection,
+  mockItem
+};
