@@ -4,22 +4,22 @@ const User = require('../src/models/User');
 const Collection = require('../src/models/Collection');
 const Item = require('../src/models/Item');
 
+// Data for tests
+const mockUser = require('./mockData').mockUser;
+const mockCollection = require('./mockData').mockCollection;
+const mockItem = require('./mockData').mockItem;
+// Data for tests
+
+
 // User tests
 test('Testing user schema', (t) => {
-  const firstName = "John";
-  const lastName = "Userman";
-  const photo = "https://d30y9cdsu7xlg0.cloudfront.net/png/17241-200.png";
-  const email = "johnuserman@email.com";
-  const password = "secret";
-  
   const newUser = new User({
-    firstName: firstName,
-    lastName: lastName,
-    photo: photo,
-    email: email,
-    password: password,
+    firstName: mockUser.firstName,
+    lastName: mockUser.lastName,
+    photo: mockUser.photo,
+    email: mockUser.email,
+    password: mockUser.password,
   });
-  const userId = newUser._id;
   
   t.test('when a new user is created', (t) => {
     t.notDeepEqual(newUser._id, undefined, "unique id should be assigned");
@@ -34,24 +34,18 @@ test('Testing user schema', (t) => {
   });
 
   t.test('when a user is updated', (t) => {
-    const newFirstName = "Mary";
-    const newLastName = "McUser";
-    const newPhoto = "https://cdn3.iconfinder.com/data/icons/rcons-user-action/32/girl-512.png";
-    const newEmail = "marymcuser@email.com";
-    const newPassword = "moresecret";
-
-    newUser.firstName = newFirstName;
-    newUser.lastName = newLastName;
-    newUser.photo = newPhoto;
-    newUser.email = newEmail;
-    newUser.password = newPassword;
+    newUser.firstName = mockUser.newFirstName;
+    newUser.lastName = mockUser.newLastName;
+    newUser.photo = mockUser.newPhoto;
+    newUser.email = mockUser.newEmail;
+    newUser.password = mockUser.newPassword;
     newUser.collections.push('new collection');
     
-    t.deepEqual(newUser.firstName, newFirstName, 'first name should match new the one');
-    t.deepEqual(newUser.lastName, newLastName, 'last name should match new the one');
-    t.deepEqual(newUser.photo, newPhoto, 'photo should match new the one');
-    t.deepEqual(newUser.email, newEmail, 'email should match new the one');
-    t.deepEqual(newUser.password, newPassword, 'password should match new the one');
+    t.deepEqual(newUser.firstName, mockUser.newFirstName, 'first name should match new the one');
+    t.deepEqual(newUser.lastName, mockUser.newLastName, 'last name should match new the one');
+    t.deepEqual(newUser.photo, mockUser.newPhoto, 'photo should match new the one');
+    t.deepEqual(newUser.email, mockUser.newEmail, 'email should match new the one');
+    t.deepEqual(newUser.password, mockUser.newPassword, 'password should match new the one');
     t.notDeepEqual(newUser.collections.length, 0, 'collections array should not be empty');
     t.end();
   });
@@ -61,10 +55,8 @@ test('Testing user schema', (t) => {
 
 // Collection tests
 test('Testing collection schema', (t) => {
-  const collectionName = "Coins";
-
   const newCollection = new Collection({
-    name: collectionName
+    name: mockCollection.name
   });
 
   t.test('when a new collection is created', (t) => {
@@ -76,12 +68,10 @@ test('Testing collection schema', (t) => {
   });
 
   t.test('when a collection is updated', (t) => {
-    const newCollectionName = "Stamps";
-
-    newCollection.name = newCollectionName;
+    newCollection.name = mockCollection.newName;
     newCollection.items.push('new item');
 
-    t.deepEqual(newCollection.name, newCollectionName, 'name should match new the one');
+    t.deepEqual(newCollection.name, mockCollection.newName, 'name should match new the one');
     t.notDeepEqual(newCollection.items.length, 0, 'items array should not be empty');
     t.end();
   });
@@ -91,16 +81,11 @@ test('Testing collection schema', (t) => {
 
 // Item tests
 test('Testing item schema', (t) => {
-  const itemName = "Cool Item";
-  const itemPhoto = "https://image.flaticon.com/icons/svg/217/217853.svg";
-  const itemDescription = "Rare cool item";
-  const itemExtraInfo = "Some extra info";
-
   const newItem = new Item({
-    name: itemName,
-    photo: itemPhoto,
-    description: itemDescription,
-    extraInfo: itemExtraInfo,
+    name: mockItem.name,
+    photo: mockItem.photo,
+    description: mockItem.description,
+    extraInfo: mockItem.extraInfo,
   });
 
   t.test('when a new item is created', (t) => {
@@ -113,20 +98,15 @@ test('Testing item schema', (t) => {
   });
 
   t.test('when a item is updated', (t) => {
-    const newItemName = "Super Cool Item";
-    const newItemPhoto = "https://d30y9cdsu7xlg0.cloudfront.net/png/71297-200.png";
-    const newItemDescription = "Rare super cool item";
-    const newItemExtraInfo = "Some super extra info";
+    newItem.name = mockItem.newItemName,
+    newItem.photo = mockItem.newItemPhoto,
+    newItem.description = mockItem.newItemDescription,
+    newItem.extraInfo = mockItem.newItemExtraInfo,
 
-    newItem.name = newItemName,
-    newItem.photo = newItemPhoto,
-    newItem.description = newItemDescription,
-    newItem.extraInfo = newItemExtraInfo,
-
-    t.deepEqual(newItem.name, newItemName, 'name should match new the one');
-    t.deepEqual(newItem.photo, newItemPhoto, 'photo should match new the one');
-    t.deepEqual(newItem.description, newItemDescription, 'description should match new the one');
-    t.deepEqual(newItem.extraInfo, newItemExtraInfo, 'extra info should match new the one');
+    t.deepEqual(newItem.name, mockItem.newItemName, 'name should match new the one');
+    t.deepEqual(newItem.photo, mockItem.newItemPhoto, 'photo should match new the one');
+    t.deepEqual(newItem.description, mockItem.newItemDescription, 'description should match new the one');
+    t.deepEqual(newItem.extraInfo, mockItem.newItemExtraInfo, 'extra info should match new the one');
     t.end();
   });
 });

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon ./src/server.js",
     "schemas-tests": "tape ./tests/schemas.test.js | tap-spec",
+    "controllers-tests": "tape ./tests/controllers.test.js | tap-spec",
     "database-tests": "tape ./tests/database.test.js | tap-spec"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "mongoose": "^4.13.5"
   },
   "devDependencies": {
+    "node-mocks-http": "^1.6.6",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0"
   }
