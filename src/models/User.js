@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const Collection = require('./Collection');
+
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
@@ -25,7 +27,7 @@ const userSchema = mongoose.Schema({
     required: true
   },
   collections: {
-    type: Array,
+    type: [Collection],
     default: []
   }
 });

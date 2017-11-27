@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const newItem = mongoose.Schema({
+const itemSchema = mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -12,11 +12,23 @@ const newItem = mongoose.Schema({
   description: {
     type: String,
   },
-  extraInfo: {
+  productionYear: {
+    type: Number,
+  },
+  acquisitionYear: {
+    type: Number,
+  },
+  origin: {
     type: String,
-  }
+  },
+  manufacturer: {
+    type: String,
+  },
+  condition: {
+    type: String,
+  },
 });
 
-const Item = mongoose.model('Item', newItem);
+const Item = mongoose.model('Item', itemSchema);
 
 module.exports = Item;

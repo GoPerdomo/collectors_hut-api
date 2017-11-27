@@ -1,16 +1,13 @@
 const mongoose = require('mongoose');
 
-const newCollection = mongoose.Schema({
+const Collection = mongoose.Schema({
   name: {
-    type: String,
-    required: true
+    type: String
   },
   items: {
     type: Array,
     default: []
   }
 });
-
-const Collection = mongoose.model('Collection', newCollection);
 
 module.exports = Collection;
