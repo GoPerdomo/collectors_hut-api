@@ -2,6 +2,20 @@ const express = require('express');
 
 const User = require('../models/User');
 
+// Fetches user from the DB
+const getUser = (req, res, next) => {
+  User.findById(req.params.userId, (err, user) => {
+    if(err) {
+      err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      res.status(200).json(user);
+    }
+  });
+};
+// Fetches user from the DB
+
 // Creates a new user and saves it to the DB
 const signUp = (req, res, next) => {
   const newUser = new User({
@@ -20,9 +34,73 @@ const signUp = (req, res, next) => {
       res.status(200).json(newUser);
     }
   });
-}
+};
 // Creates a new user and saves it to the DB
 
+// Authenticates the user
+// TODO: Implement token (jwt)
+const signIn = (req, res, next) => {
+  User.authenticates(req.body.email, req.body.password, (err, user) => {
+    if(err || !user) {
+      err = new Error('Wrong email or password');
+      err.status = 401;
+      return next(err);
+    } else {
+      res.status(200).json(user);
+    }
+  });
+}
+// Authenticates the user
+
+// Modifies the user info and saves the changes to the DB
+const updateUser = (req, res, next) => {
+  const newFirstName = req.body.firstName;
+  const newLastName = req.body.lastName;
+  const newPhoto = req.body.photo;
+  const newEmail = req.body.email;
+  const newPassword = req.body.password;
+  
+  User.findById(req.params.userId, (err, user) => {
+    if(err) return next(err);
+    if(!user) return next();
+    user.firstName = newFirstName || user.firstName;
+    user.lastName = newLastName || user.lastName;
+    user.photo = newLastName || user.photo;
+    user.email = newEmail || user.email;
+    user.password = newPassword || user.password;
+    
+    user.save((err) => {
+      if(err) {
+        err.status = 400;
+        next(err);
+      } else {
+        res.status(200).json(user);
+      }
+    });
+  });
+};
+// Modifies the user info and saves the changes to the DB
+
+// Removes user from the DB
+const deleteUser = (req, res, next) => {
+  User.findByIdAndRemove(req.params.userId, (err, user) => {
+    if(err) {
+      err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      res.status(200).json({ message: "User deleted" });
+    }
+  });
+}
+// Removes user from the DB
+
+
+
 module.exports = {
-  signUp
+  getUser,
+  signIn,
+  signUp,
+  updateUser,
+  deleteUser
 }

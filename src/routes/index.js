@@ -4,6 +4,8 @@ const router = express.Router();
 const config = require('../config/config');
 const userHandler = require('../controllers/user');
 
+// TODO: Implement jwt
+
 // User Routes
 router.get('/:userId', userHandler.getUser);
 
