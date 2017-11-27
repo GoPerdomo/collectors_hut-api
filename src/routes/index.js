@@ -8,37 +8,43 @@ const collectionHandler = require('../controllers/collection');
 // TODO: Implement jwt
 
 // User Routes
-router.get('/:userId', userHandler.getUser);
+router.get('/users/', userHandler.getAllUsers);
+
+router.get('/users/:userId', userHandler.getUser);
 
 router.post('/sign-up', userHandler.signUp);
 
 router.post('/sign-in', userHandler.signIn);
 
-router.put('/:userId', userHandler.updateUser);
+router.put('/users/:userId', userHandler.updateUser);
 
-router.delete('/:userId', userHandler.deleteUser);
+router.delete('/users/:userId', userHandler.deleteUser);
 // User Routes
 
 
 // // Collection Routes
-// router.get('/:userId/:collectionId', collectionHandler.getCollection);
+router.get('/users/:userId/collections/', collectionHandler.getAllCollections);
 
-router.post('/:userId/create-collection', collectionHandler.createCollection);
+router.get('/users/:userId/collections/:collectionId', collectionHandler.getCollection);
 
-// router.put('/:userId/:collectionId', collectionHandler.updateCollection);
+router.post('/users/:userId/create-collection', collectionHandler.createCollection);
 
-// router.delete('/:userId/:collectionId', collectionHandler.deleteCollection);
+router.put('/users/:userId/collections/:collectionId', collectionHandler.updateCollection);
+
+router.delete('/users/:userId/collections/:collectionId', collectionHandler.deleteCollection);
 // // Collection Routes
 
 
 // // Item Routes
-// router.get('/:userId/:collectionId/:itemId', itemHandler.getItem);
+router.get('/users/:userId/collections/:collectionId/items/', itemHandler.getAllItems);
 
-// router.post('/:userId/:collectionId/add-item', itemHandler.addItem);
+router.get('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.getItem);
 
-// router.put('/:userId/:collectionId/:itemId', itemHandler.updateItem);
+router.post('/users/:userId/collections/:collectionId/add-item', itemHandler.addItem);
 
-// router.delete('/:userId/:collectionId/:itemId', itemHandler.deleteItem);
+router.put('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.updateItem);
+
+router.delete('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.deleteItem);
 // // Item Routes
 
 module.exports = router;
