@@ -1,5 +1,19 @@
 const User = require('../models/User');
 
+// Fetches all users from the DB
+const getAllUsers = (req, res, next) => {
+  User.find({}, (err, users) => {
+    if(err) {
+      err = new Error("Users not found"); // TODO: Refactor error
+      err.status = 404;
+      return next(err);
+    } else {
+      res.status(200).json(users);
+    }
+  });
+};
+// Fetches all users from the DB
+
 // Fetches user from the DB
 const getUser = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
@@ -96,6 +110,7 @@ const deleteUser = (req, res, next) => {
 
 
 module.exports = {
+  getAllUsers,
   getUser,
   signIn,
   signUp,
