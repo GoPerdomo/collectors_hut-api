@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const config = require('../config/config');
+
 const userHandler = require('../controllers/user');
 const collectionHandler = require('../controllers/collection');
+const itemHandler = require('../controllers/item');
 
 // TODO: Implement jwt
 
@@ -38,15 +40,15 @@ router.delete('/users/:userId/collections/:collectionId', collectionHandler.dele
 
 
 // Item Routes
-// router.get('/users/:userId/collections/:collectionId/items/', itemHandler.getAllItems);
+router.get('/users/:userId/collections/:collectionId/items/', itemHandler.getAllItems);
 
-// router.get('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.getItem);
+router.get('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.getItem);
 
-// router.post('/users/:userId/collections/:collectionId/add-item', itemHandler.addItem);
+router.post('/users/:userId/collections/:collectionId/add-item', itemHandler.addItem);
 
-// router.put('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.updateItem);
+router.put('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.updateItem);
 
-// router.delete('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.deleteItem);
+router.delete('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.deleteItem);
 // Item Routes
 
 module.exports = router;

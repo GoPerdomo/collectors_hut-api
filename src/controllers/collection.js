@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+// TODO: Refactor !
+
 // Fetches all users from the DB and sends only the collections
 const getAllCollections = (req, res, next) => {
   User.find({}, (err, users) => {
@@ -21,6 +23,7 @@ const getAllCollections = (req, res, next) => {
 // Fetches all users from the DB and sends only the collections
 
 // Gets all the collections from a user
+// TODO: Populate with items
 const getUserCollections = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
     if(err) {
@@ -70,9 +73,10 @@ const createCollection = (req, res, next) => {
       user.save((err) => {
         if(err) {
           err.status = 400;
-          next(err);
+          return next(err);
+        } else {
+          res.status(200).json(user);
         }
-        res.status(200).json(user);
       });
     }
   });

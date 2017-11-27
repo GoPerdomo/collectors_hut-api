@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+// TODO: Refactor !
+
 // Fetches all users from the DB
 const getAllUsers = (req, res, next) => {
   User.find({}, (err, users) => {
