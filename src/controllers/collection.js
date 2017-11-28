@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Item = require('../models/Item');
 
 // TODO: Refactor !
 
@@ -45,13 +46,16 @@ const getCollection = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
-      const selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId);
+      const selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId).toObject();
       if(!selectedCollection) {
         err = new Error("Collection not found");
         err.status = 404;
         return next(err);
       } else {
-        res.status(200).json(selectedCollection);
+        Item.find({ collectionId: req.params.collectionId }, (err, items) => {
+          selectedCollection.items = items;
+          res.status(200).json(selectedCollection);
+        });
       }
     }
   });
