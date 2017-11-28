@@ -46,13 +46,14 @@ const getCollection = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
-      const selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId).toObject();
+      let selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId);
       if(!selectedCollection) {
         err = new Error("Collection not found");
         err.status = 404;
         return next(err);
       } else {
         Item.find({ collectionId: req.params.collectionId }, (err, items) => {
+          selectedCollection = selectedCollection.toObject();
           selectedCollection.items = items;
           res.status(200).json(selectedCollection);
         });
