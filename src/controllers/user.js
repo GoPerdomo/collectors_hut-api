@@ -68,20 +68,14 @@ const signIn = (req, res, next) => {
 
 // Modifies the user info and saves the changes to the DB
 const updateUser = (req, res, next) => {
-  const newFirstName = req.body.firstName;
-  const newLastName = req.body.lastName;
-  const newPhoto = req.body.photo;
-  const newEmail = req.body.email;
-  const newPassword = req.body.password;
-  
   User.findById(req.params.userId, (err, user) => {
     if(err) return next(err);
     if(!user) return next();
-    user.firstName = newFirstName || user.firstName;
-    user.lastName = newLastName || user.lastName;
-    user.photo = newLastName || user.photo;
-    user.email = newEmail || user.email;
-    user.password = newPassword || user.password;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.photo = req.body.photo || user.photo;
+    user.email = req.body.email || user.email;
+    user.password = req.body.password || user.password;
     
     user.save((err) => {
       if(err) {
