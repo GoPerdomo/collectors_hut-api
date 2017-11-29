@@ -103,7 +103,8 @@ const updateCollection = (req, res, next) => {
         err.status = 404;
         return next(err);
       } else {
-        selectedCollection.name = req.body.name;
+        selectedCollection.name = req.body.name || selectedCollection.name;
+        selectedCollection.info = req.body.info || selectedCollection.info;
         user.save((err) => {
           if(err) {
             err.status = 400;
