@@ -14,7 +14,7 @@ const getAllCollections = (req, res, next) => {
       const collections = [];
       for(user of users) {
         for(collection of user.collections) {
-          collections.push(collection);
+          collections.push({userId: user._id, collection});
         }
       }
       res.status(200).json(collections);
