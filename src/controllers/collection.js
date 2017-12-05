@@ -73,14 +73,17 @@ const createCollection = (req, res, next) => {
       return next(err);
     } else {
       user.collections.push({
-        name: req.body.name
+        name: req.body.name,
+        info: req.body.info,
       });
+      const newCollection = user.collections[user.collections.length-1];
       user.save((err) => {
         if(err) {
           err.status = 400;
           return next(err);
         } else {
-          res.status(200).json(user);
+          User.find()
+          res.status(200).json(newCollection);
         }
       });
     }
