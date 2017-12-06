@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const expressJWT = require('express-jwt');
 
-const config = require('../config/config');
-
 const userHandler = require('../controllers/user');
 const collectionHandler = require('../controllers/collection');
 const itemHandler = require('../controllers/item');
 
-// TODO: Implement jwt
+const config = require('../config/config');
+const userAuthorization = require('../middlewares').userAuthorization;
+
 
 // User Routes
 router.get('/users/', userHandler.getAllUsers);
@@ -19,9 +19,9 @@ router.post('/sign-up', userHandler.signUp);
 
 router.post('/sign-in', userHandler.signIn);
 
-router.put('/users/:userId', expressJWT({ secret: config.secret }), userHandler.updateUser);
+router.put('/users/:userId', expressJWT({ secret: config.secret }), userAuthorization, userHandler.updateUser);
 
-router.delete('/users/:userId', expressJWT({ secret: config.secret }), userHandler.deleteUser);
+router.delete('/users/:userId', expressJWT({ secret: config.secret }), userAuthorization, userHandler.deleteUser);
 // User Routes
 
 
