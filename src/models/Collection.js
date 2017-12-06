@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 
 const Collection = mongoose.Schema({
   name: {
-    type: String
+    type: String,
+    required: true
+  },
+  info: {
+    type: String,
+    default: ""
   }
 });
 

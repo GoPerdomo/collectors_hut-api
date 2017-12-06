@@ -31,7 +31,7 @@ router.get('/users/:userId/collections/', collectionHandler.getUserCollections);
 
 router.get('/users/:userId/collections/:collectionId', collectionHandler.getCollection);
 
-router.post('/users/:userId/create-collection', collectionHandler.createCollection);
+router.post('/users/:userId/add-collection', collectionHandler.createCollection);
 
 router.put('/users/:userId/collections/:collectionId', collectionHandler.updateCollection);
 

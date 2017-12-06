@@ -67,26 +67,17 @@ const addItem = (req, res, next) => {
 // Updates item and saves it
 // TODO: Allow to remove infos
 const updateItem = (req, res, next) => {
-  const newName = req.body.name;
-  const newDescription = req.body.description;
-  const newPhoto = req.body.photo;
-  const newProductionYear = req.body.productionYear;
-  const newAcquisitionYear = req.body.acquisitionYear;
-  const newOrigin = req.body.origin;
-  const newManufacturer = req.body.manufacturer;
-  const newCondition = req.body.condition;
-  
   Item.findById(req.params.itemId, (err, item) => {
     if(err) return next(err);
     if(!item) return next();
-    item.name = newName || item.name;
-    item.description = newDescription || item.description;
-    item.photo = newPhoto || item.photo;
-    item.productionYear = newProductionYear || item.productionYear;
-    item.acquisitionYear = newAcquisitionYear || item.acquisitionYear;
-    item.origin = newOrigin || item.origin;
-    item.manufacturer = newManufacturer || item.manufacturer;
-    item.condition = newCondition || item.condition;
+    item.name = req.body.name || item.name;
+    item.description = req.body.description || item.description;
+    item.photo = req.body.photo || item.photo;
+    item.productionYear = req.body.productionYear || item.productionYear;
+    item.acquisitionYear = req.body.acquisitionYear || item.acquisitionYear;
+    item.origin = req.body.origin || item.origin;
+    item.manufacturer = req.body.manufacturer || item.manufacturer;
+    item.condition = req.body.condition || item.condition;
     
     item.save((err) => {
       if(err) {

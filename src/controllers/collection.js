@@ -14,7 +14,7 @@ const getAllCollections = (req, res, next) => {
       const collections = [];
       for(user of users) {
         for(collection of user.collections) {
-          collections.push(collection);
+          collections.push({userId: user._id, collection});
         }
       }
       res.status(200).json(collections);
@@ -73,14 +73,17 @@ const createCollection = (req, res, next) => {
       return next(err);
     } else {
       user.collections.push({
-        name: req.body.name
+        name: req.body.name,
+        info: req.body.info,
       });
+      const newCollection = user.collections[user.collections.length-1];
       user.save((err) => {
         if(err) {
           err.status = 400;
           return next(err);
         } else {
-          res.status(200).json(user);
+          User.find()
+          res.status(200).json(newCollection);
         }
       });
     }
@@ -103,7 +106,8 @@ const updateCollection = (req, res, next) => {
         err.status = 404;
         return next(err);
       } else {
-        selectedCollection.name = req.body.name;
+        selectedCollection.name = req.body.name || selectedCollection.name;
+        selectedCollection.info = req.body.info || selectedCollection.info;
         user.save((err) => {
           if(err) {
             err.status = 400;
