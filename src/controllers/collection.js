@@ -1,20 +1,19 @@
 const User = require('../models/User');
 const Item = require('../models/Item');
 
-// TODO: Refactor !
 
 // Fetches all users from the DB and sends only the collections
 const getAllCollections = (req, res, next) => {
   User.find({}, (err, users) => {
-    if(err) {
+    if (err) {
       err = new Error("Collections not found"); // TODO: Refactor error
       err.status = 404;
       return next(err);
     } else {
       const collections = [];
-      for(user of users) {
-        for(collection of user.collections) {
-          collections.push({userId: user._id, collection});
+      for (user of users) {
+        for (collection of user.collections) {
+          collections.push({ userId: user._id, collection });
         }
       }
       res.status(200).json(collections);
@@ -27,7 +26,7 @@ const getAllCollections = (req, res, next) => {
 // TODO: Populate with items
 const getUserCollections = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
-    if(err) {
+    if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
@@ -40,19 +39,21 @@ const getUserCollections = (req, res, next) => {
 
 // Gets a collection from a user
 const getCollection = (req, res, next) => {
+  const { collectionId } = req.params;
+
   User.findById(req.params.userId, (err, user) => {
-    if(err) {
+    if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
-      let selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId);
-      if(!selectedCollection) {
+      let selectedCollection = user.collections.find(collection => collection._id == collectionId);
+      if (!selectedCollection) {
         err = new Error("Collection not found");
         err.status = 404;
         return next(err);
       } else {
-        Item.find({ collectionId: req.params.collectionId }, (err, items) => {
+        Item.find({ collectionId }, (err, items) => {
           selectedCollection = selectedCollection.toObject();
           selectedCollection.items = items;
           res.status(200).json(selectedCollection);
@@ -66,19 +67,18 @@ const getCollection = (req, res, next) => {
 
 // Creates a new collection and assigns it to the user
 const createCollection = (req, res, next) => {
+  const { name, info } = req.body;
+
   User.findById(req.params.userId, (err, user) => {
-    if(err) {
+    if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
-      user.collections.push({
-        name: req.body.name,
-        info: req.body.info,
-      });
-      const newCollection = user.collections[user.collections.length-1];
+      user.collections.push({ name, info });
+      const newCollection = user.collections[user.collections.length - 1];
       user.save((err) => {
-        if(err) {
+        if (err) {
           err.status = 400;
           return next(err);
         } else {
@@ -94,22 +94,25 @@ const createCollection = (req, res, next) => {
 
 // Finds user and updates the selected collection
 const updateCollection = (req, res, next) => {
+  const { collectionId } = req.params;
+  const { name, info } = req.body;
+
   User.findById(req.params.userId, (err, user) => {
-    if(err) {
+    if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
-      const selectedCollection = user.collections.find(collection => collection._id == req.params.collectionId);
-      if(!selectedCollection) {
+      const selectedCollection = user.collections.find(collection => collection._id == collectionId);
+      if (!selectedCollection) {
         err = new Error("Collection not found");
         err.status = 404;
         return next(err);
       } else {
-        selectedCollection.name = req.body.name || selectedCollection.name;
-        selectedCollection.info = req.body.info || selectedCollection.info;
+        selectedCollection.name = name || selectedCollection.name;
+        selectedCollection.info = info || selectedCollection.info;
         user.save((err) => {
-          if(err) {
+          if (err) {
             err.status = 400;
             next(err);
           }
@@ -124,14 +127,14 @@ const updateCollection = (req, res, next) => {
 // Finds user and deletes selected collection
 const deleteCollection = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
-    if(err) {
+    if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
       user.collections.pull({ _id: req.params.collectionId });
       user.save((err) => {
-        if(err) {
+        if (err) {
           err.status = 400;
           next(err);
         }
@@ -141,6 +144,7 @@ const deleteCollection = (req, res, next) => {
   });
 };
 // Finds user and deletes selected collection
+
 
 module.exports = {
   getAllCollections,
