@@ -12,6 +12,4 @@ const userAuthorization = (req, res, next) => {
 }
 // Checks if the user id stored in the token equals to the one in the params
 
-module.exports = {
-  userAuthorization
-};
+module.exports = userAuthorization;
