@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const User = require('../models/User');
 
-// TODO: Refactor !
 
 const assignToken = (user) =>
   jwt.sign(
@@ -123,7 +122,6 @@ const deleteUser = (req, res, next) => {
   });
 }
 // Removes user from the DB
-
 
 
 module.exports = {

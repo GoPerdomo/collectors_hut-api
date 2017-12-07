@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const Item = require('../models/Item');
 
-// TODO: Refactor !
 
 // Fetches all users from the DB and sends only the collections
 const getAllCollections = (req, res, next) => {
@@ -145,6 +144,7 @@ const deleteCollection = (req, res, next) => {
   });
 };
 // Finds user and deletes selected collection
+
 
 module.exports = {
   getAllCollections,

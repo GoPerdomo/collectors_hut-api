@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const Item = require('../models/Item');
 
-// TODO: Refactor !
 
 // Get all items from a user
 const getAllItems = (req, res, next) => {
