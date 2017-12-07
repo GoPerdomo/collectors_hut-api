@@ -49,12 +49,14 @@ const getUser = (req, res, next) => {
 
 // Creates a new user and saves it to the DB
 const signUp = (req, res, next) => {
+  const { firstName, lastName, photo, email, password } = req.body;
+
   const newUser = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    photo: req.body.photo,
-    email: req.body.email,
-    password: req.body.password
+    firstName: firstName,
+    lastName: lastName,
+    photo: photo,
+    email: email,
+    password: password
   });
 
   newUser.save((err) => {
@@ -69,7 +71,6 @@ const signUp = (req, res, next) => {
 // Creates a new user and saves it to the DB
 
 // Authenticates the user
-// TODO: Implement token (jwt)
 const signIn = (req, res, next) => {
   User.authenticates(req.body.email, req.body.password, (err, user) => {
     if (err || !user) {
@@ -86,14 +87,16 @@ const signIn = (req, res, next) => {
 
 // Modifies the user info and saves the changes to the DB
 const updateUser = (req, res, next) => {
+  const { firstName, lastName, photo, email, password } = req.body;
+
   User.findById(req.params.userId, (err, user) => {
     if (err) return next(err);
     if (!user) return next();
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.photo = req.body.photo || user.photo;
-    user.email = req.body.email || user.email;
-    user.password = req.body.password || user.password;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.photo = photo || user.photo;
+    user.email = email || user.email;
+    user.password = password || user.password;
 
     user.save((err) => {
       if (err) {
