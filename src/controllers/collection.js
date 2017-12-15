@@ -138,7 +138,7 @@ const deleteCollection = (req, res, next) => {
           err.status = 400;
           next(err);
         }
-        res.status(200).json({ message: "Collection deleted" });
+        res.status(200).json({});
       });
     }
   });
