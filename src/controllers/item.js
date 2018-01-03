@@ -121,7 +121,7 @@ const deleteItem = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
-      res.status(200).json({ message: "Item deleted" });
+      res.status(200).json({});
     }
   });
 };

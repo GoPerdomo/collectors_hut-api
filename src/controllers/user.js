@@ -48,12 +48,10 @@ const getUser = (req, res, next) => {
 
 // Creates a new user and saves it to the DB
 const signUp = (req, res, next) => {
-  const { firstName, lastName, photo, email, password } = req.body;
-
+  const { firstName, lastName, email, password } = req.body;
   const newUser = new User({
     firstName: firstName,
     lastName: lastName,
-    photo: photo,
     email: email,
     password: password
   });
@@ -63,7 +61,8 @@ const signUp = (req, res, next) => {
       err.status = 400;
       next(err);
     } else {
-      res.status(200).json(newUser);
+      const token = assignToken(newUser);
+      res.status(200).json({userId: newUser._id, token});
     }
   });
 };
@@ -71,14 +70,14 @@ const signUp = (req, res, next) => {
 
 // Authenticates the user
 const signIn = (req, res, next) => {
-  User.authenticates(req.body.email, req.body.password, (err, user) => {
-    if (err || !user) {
+  User.findOne({email:req.body.email}, (err, user) => {
+    if (err || !user || req.body.password !== user.password) {
       err = new Error('Wrong email or password');
       err.status = 401;
       return next(err);
     } else {
       const token = assignToken(user);
-      res.status(200).json(token);
+      res.status(200).json({userId: user._id, token});
     }
   });
 }
