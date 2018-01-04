@@ -32,6 +32,26 @@ const getAllUsers = (req, res, next) => {
 };
 // Fetches all users from the DB
 
+// Search for users by name
+const searchUsers = (req, res, next) => {
+  const search = new RegExp(req.query.name, "i");
+  User.find({
+    $or: [
+      { firstName: search },
+      { lastName: search }
+    ]
+  }, (err, users) => {
+    if (err) {
+      err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      res.status(200).json(users);
+    }
+  });
+};
+// Search for users by name
+
 // Fetches user from the DB
 const getUser = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
@@ -62,7 +82,7 @@ const signUp = (req, res, next) => {
       next(err);
     } else {
       const token = assignToken(newUser);
-      res.status(200).json({userId: newUser._id, token});
+      res.status(200).json({ userId: newUser._id, token });
     }
   });
 };
@@ -70,14 +90,14 @@ const signUp = (req, res, next) => {
 
 // Authenticates the user
 const signIn = (req, res, next) => {
-  User.findOne({email:req.body.email}, (err, user) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
     if (err || !user || req.body.password !== user.password) {
       err = new Error('Wrong email or password');
       err.status = 401;
       return next(err);
     } else {
       const token = assignToken(user);
-      res.status(200).json({userId: user._id, token});
+      res.status(200).json({ userId: user._id, token });
     }
   });
 }
@@ -125,6 +145,7 @@ const deleteUser = (req, res, next) => {
 
 module.exports = {
   getAllUsers,
+  searchUsers,
   getUser,
   signIn,
   signUp,

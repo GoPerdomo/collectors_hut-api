@@ -11,7 +11,9 @@ const userAuthorization = require('../middlewares');
 
 
 // User Routes
-router.get('/users/', userHandler.getAllUsers);
+router.get('/users', userHandler.getAllUsers);
+
+router.get('/search/users', userHandler.searchUsers);
 
 router.get('/users/:userId', userHandler.getUser);
 
@@ -26,7 +28,7 @@ router.delete('/users/:userId', expressJWT({ secret: config.secret }), userAutho
 
 
 // Collection Routes
-router.get('/collections/', collectionHandler.getAllCollections);
+router.get('/collections', collectionHandler.getAllCollections);
 
 router.get('/users/:userId/collections/', collectionHandler.getUserCollections);
 
@@ -41,7 +43,7 @@ router.delete('/users/:userId/collections/:collectionId', expressJWT({ secret: c
 
 
 // Item Routes
-router.get('/users/:userId/collections/:collectionId/items/', itemHandler.getAllItems);
+router.get('/users/:userId/collections/:collectionId/items', itemHandler.getAllItems);
 
 router.get('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.getItem);
 
