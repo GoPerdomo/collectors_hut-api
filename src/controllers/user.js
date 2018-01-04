@@ -32,26 +32,6 @@ const getAllUsers = (req, res, next) => {
 };
 // Fetches all users from the DB
 
-// Search for users by name
-const searchUsers = (req, res, next) => {
-  const search = new RegExp(req.query.name, "i");
-  User.find({
-    $or: [
-      { firstName: search },
-      { lastName: search }
-    ]
-  }, (err, users) => {
-    if (err) {
-      err = new Error("User not found");
-      err.status = 404;
-      return next(err);
-    } else {
-      res.status(200).json(users);
-    }
-  });
-};
-// Search for users by name
-
 // Fetches user from the DB
 const getUser = (req, res, next) => {
   User.findById(req.params.userId, (err, user) => {
@@ -145,7 +125,6 @@ const deleteUser = (req, res, next) => {
 
 module.exports = {
   getAllUsers,
-  searchUsers,
   getUser,
   signIn,
   signUp,
