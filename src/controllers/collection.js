@@ -22,6 +22,30 @@ const getAllCollections = (req, res, next) => {
 };
 // Fetches all users from the DB and sends only the collections
 
+// Search for collections by name
+const searchCollections = (req, res, next) => {
+  const query = req.query.collection;
+  const search = new RegExp(query, "i");
+  User.find({collections: { $elemMatch: {name: search} } }, (err, users) => {
+    if (err) {
+      err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      const collections = [];
+      for (user of users) {
+        for (collection of user.collections) {
+          if (collection.name.toLowerCase().includes(query)) {
+            collections.push({ user, collection });
+          }
+        }
+      }
+      res.status(200).json(collections);
+    }
+  });
+};
+// Search for collections by name
+
 // Gets all the collections from a user
 // TODO: Populate with items
 const getUserCollections = (req, res, next) => {
@@ -148,6 +172,7 @@ const deleteCollection = (req, res, next) => {
 
 module.exports = {
   getAllCollections,
+  searchCollections,
   getUserCollections,
   getCollection,
   createCollection,

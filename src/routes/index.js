@@ -30,6 +30,8 @@ router.delete('/users/:userId', expressJWT({ secret: config.secret }), userAutho
 // Collection Routes
 router.get('/collections', collectionHandler.getAllCollections);
 
+router.get('/search/collections', collectionHandler.searchCollections);
+
 router.get('/users/:userId/collections/', collectionHandler.getUserCollections);
 
 router.get('/users/:userId/collections/:collectionId', collectionHandler.getCollection);
