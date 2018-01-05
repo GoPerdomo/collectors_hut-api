@@ -62,7 +62,7 @@ const signUp = (req, res, next) => {
       next(err);
     } else {
       const token = assignToken(newUser);
-      res.status(200).json({userId: newUser._id, token});
+      res.status(200).json({ userId: newUser._id, token });
     }
   });
 };
@@ -70,14 +70,14 @@ const signUp = (req, res, next) => {
 
 // Authenticates the user
 const signIn = (req, res, next) => {
-  User.findOne({email:req.body.email}, (err, user) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
     if (err || !user || req.body.password !== user.password) {
       err = new Error('Wrong email or password');
       err.status = 401;
       return next(err);
     } else {
       const token = assignToken(user);
-      res.status(200).json({userId: user._id, token});
+      res.status(200).json({ userId: user._id, token });
     }
   });
 }
