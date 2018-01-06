@@ -19,7 +19,11 @@ const search = (req, res, next) => {
         err.status = 404;
         return next(err);
       } else {
-        res.status(200).json(users);
+        const results = [];
+        for (user of users) {
+          results.push({ user })
+        }
+        res.status(200).json(results);
       }
     });
   }
@@ -35,15 +39,15 @@ const search = (req, res, next) => {
         err.status = 404;
         return next(err);
       } else {
-        const collections = [];
+        const results = [];
         for (user of users) {
           for (collection of user.collections) {
             if (collection.name.toLowerCase().includes(collectionQuery)) {
-              collections.push({ collection, user });
+              results.push({ collection, user });
             }
           }
         }
-        res.status(200).json(collections);
+        res.status(200).json(results);
       }
     });
   }
