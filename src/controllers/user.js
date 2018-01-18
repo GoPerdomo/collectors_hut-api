@@ -18,23 +18,9 @@ const assignToken = (user) =>
   );
 
 
-// Fetches all users from the DB
-const getAllUsers = (req, res, next) => {
-  User.find({}, (err, users) => {
-    if (err) {
-      err = new Error("Users not found"); // TODO: Refactor error
-      err.status = 404;
-      return next(err);
-    } else {
-      res.status(200).json(users);
-    }
-  });
-};
-// Fetches all users from the DB
-
 // Fetches user from the DB
 const getUser = (req, res, next) => {
-  User.findById(req.params.userId, (err, user) => {
+  User.findById(req.params.userId, { password: 0, email: 0 }, (err, user) => {
     if (err) {
       err = new Error("User not found");
       err.status = 404;
@@ -101,7 +87,9 @@ const updateUser = (req, res, next) => {
         err.status = 400;
         next(err);
       } else {
-        res.status(200).json(user);
+        const { password, email, ...newUser } = user._doc;
+
+        res.status(200).json(newUser);
       }
     });
   });
@@ -124,7 +112,6 @@ const deleteUser = (req, res, next) => {
 
 
 module.exports = {
-  getAllUsers,
   getUser,
   signIn,
   signUp,

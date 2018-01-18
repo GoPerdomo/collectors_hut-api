@@ -12,8 +12,6 @@ const userAuthorization = require('../middlewares');
 
 
 // User Routes
-router.get('/users', userHandler.getAllUsers);
-
 router.get('/users/:userId', userHandler.getUser);
 
 router.post('/sign-up', userHandler.signUp);
