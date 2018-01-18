@@ -22,49 +22,6 @@ const getAllCollections = (req, res, next) => {
 };
 // Fetches all users from the DB and sends only the collections
 
-// Gets all the collections from a user
-// TODO: Populate with items
-const getUserCollections = (req, res, next) => {
-  User.findById(req.params.userId, (err, user) => {
-    if (err) {
-      err = new Error("User not found");
-      err.status = 404;
-      return next(err);
-    } else {
-      res.status(200).json(user.collections);
-    }
-  });
-};
-// Gets all the collections from a user
-
-// Gets a collection from a user
-const getCollection = (req, res, next) => {
-  const { collectionId } = req.params;
-
-  User.findById(req.params.userId, (err, user) => {
-    if (err) {
-      err = new Error("User not found");
-      err.status = 404;
-      return next(err);
-    } else {
-      let selectedCollection = user.collections.find(collection => collection._id == collectionId);
-      if (!selectedCollection) {
-        err = new Error("Collection not found");
-        err.status = 404;
-        return next(err);
-      } else {
-        Item.find({ collectionId }, (err, items) => {
-          selectedCollection = selectedCollection.toObject();
-          selectedCollection.items = items;
-          res.status(200).json(selectedCollection);
-        });
-      }
-    }
-  });
-};
-// Gets a collection from a user
-
-
 // Creates a new collection and assigns it to the user
 const createCollection = (req, res, next) => {
   const { name, info } = req.body;
@@ -148,8 +105,6 @@ const deleteCollection = (req, res, next) => {
 
 module.exports = {
   getAllCollections,
-  getUserCollections,
-  getCollection,
   createCollection,
   updateCollection,
   deleteCollection

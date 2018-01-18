@@ -27,10 +27,6 @@ router.delete('/users/:userId', expressJWT({ secret: config.secret }), userAutho
 // Collection Routes
 router.get('/collections', collectionHandler.getAllCollections);
 
-router.get('/users/:userId/collections/', collectionHandler.getUserCollections);
-
-router.get('/users/:userId/collections/:collectionId', collectionHandler.getCollection);
-
 router.post('/users/:userId/add-collection', expressJWT({ secret: config.secret }), userAuthorization, collectionHandler.createCollection);
 
 router.put('/users/:userId/collections/:collectionId', expressJWT({ secret: config.secret }), userAuthorization, collectionHandler.updateCollection);
@@ -40,10 +36,6 @@ router.delete('/users/:userId/collections/:collectionId', expressJWT({ secret: c
 
 
 // Item Routes
-router.get('/users/:userId/collections/:collectionId/items', itemHandler.getAllItems);
-
-router.get('/users/:userId/collections/:collectionId/items/:itemId', itemHandler.getItem);
-
 router.post('/users/:userId/collections/:collectionId/add-item', expressJWT({ secret: config.secret }), userAuthorization, itemHandler.addItem);
 
 router.put('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret: config.secret }), userAuthorization, itemHandler.updateItem);
