@@ -33,7 +33,7 @@ const addItem = (req, res, next) => {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
-    } else {``
+    } else {
       newItem.save((err) => {
         if (err) {
           err.status = 400;
@@ -48,7 +48,6 @@ const addItem = (req, res, next) => {
 // Adds a new item to the selected collection
 
 // Updates item and saves it
-// TODO: Allow to remove infos
 const updateItem = (req, res, next) => {
   const {
     name,
