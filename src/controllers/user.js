@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const config = require('../config/config');
 const User = require('../models/User');
+const Item = require('../models/Item');
 
 
 const assignToken = (user) =>
@@ -26,7 +27,24 @@ const getUser = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
-      res.status(200).json(user);
+      Item.find({}, (err, items) => {
+        const { collections } = user;
+        const newCollections = [];
+
+        for (collection of collections) {
+          const collectionId = collection._id;
+          const collectionItems = items.filter(item => item.collectionId.toString() === collectionId.toString());
+
+          collection = collection.toObject();
+          collection.items = collectionItems;
+          newCollections.push(collection);
+        }
+
+        user = user.toObject();
+        user.collections = newCollections;
+
+        res.status(200).json(user);
+      });
     }
   });
 };
@@ -89,7 +107,22 @@ const updateUser = (req, res, next) => {
       } else {
         const { password, email, ...newUser } = user._doc;
 
-        res.status(200).json(newUser);
+        Item.find({}, (err, items) => {
+          const { collections } = newUser;
+          const newCollections = [];
+
+          for (collection of collections) {
+            const collectionId = collection._id;
+            const collectionItems = items.filter(item => item.collectionId.toString() === collectionId.toString());
+
+            collection = collection.toObject();
+            collection.items = collectionItems;
+            newCollections.push(collection);
+          }
+
+          newUser.collections = newCollections;          
+          res.status(200).json(newUser);
+        });
       }
     });
   });

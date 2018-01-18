@@ -2,34 +2,6 @@ const User = require('../models/User');
 const Item = require('../models/Item');
 
 
-// Get all items from a user
-const getAllItems = (req, res, next) => {
-  Item.find({}, (err, items) => {
-    if (err) {
-      err = new Error("Items not found"); // TODO: Refactor error
-      err.status = 404;
-      return next(err);
-    } else {
-      res.status(200).json(items);
-    }
-  })
-};
-// Get all items from a user
-
-// Get item by id
-const getItem = (req, res, next) => {
-  Item.findById(req.params.itemId, (err, item) => {
-    if (err) {
-      err = new Error("Item not found");
-      err.status = 404;
-      return next(err);
-    } else {
-      res.status(200).json(item);
-    }
-  })
-};
-// Get item by id
-
 // Adds a new item to the selected collection
 const addItem = (req, res, next) => {
   const { userId, collectionId } = req.params;
@@ -76,7 +48,6 @@ const addItem = (req, res, next) => {
 // Adds a new item to the selected collection
 
 // Updates item and saves it
-// TODO: Allow to remove infos
 const updateItem = (req, res, next) => {
   const {
     name,
@@ -129,8 +100,6 @@ const deleteItem = (req, res, next) => {
 
 
 module.exports = {
-  getAllItems,
-  getItem,
   addItem,
   updateItem,
   deleteItem
