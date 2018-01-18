@@ -24,37 +24,40 @@ const getAllCollections = (req, res, next) => {
 
 // Creates a new collection and assigns it to the user
 const createCollection = (req, res, next) => {
+  const { userId, collectionId } = req.params;
   const { name, info } = req.body;
 
-  User.findById(req.params.userId, (err, user) => {
+  User.findById(userId, (err, user) => {
     if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
       user.collections.push({ name, info });
-      const newCollection = user.collections[user.collections.length - 1];
       user.save((err) => {
         if (err) {
           err.status = 400;
           return next(err);
         } else {
-          User.find()
-          res.status(200).json(newCollection);
+          let selectedCollection = user.collections[user.collections.length - 1];
+          Item.find({ collectionId }, (err, items) => {
+            selectedCollection = selectedCollection.toObject();
+            selectedCollection.items = items;
+            res.status(200).json(selectedCollection);
+          });
         }
       });
     }
   });
-
 };
 // Creates a new collection and assigns it to the user
 
 // Finds user and updates the selected collection
 const updateCollection = (req, res, next) => {
-  const { collectionId } = req.params;
+  const { userId, collectionId } = req.params;
   const { name, info } = req.body;
 
-  User.findById(req.params.userId, (err, user) => {
+  User.findById(userId, (err, user) => {
     if (err) {
       err = new Error("User not found");
       err.status = 404;
@@ -83,13 +86,14 @@ const updateCollection = (req, res, next) => {
 
 // Finds user and deletes selected collection
 const deleteCollection = (req, res, next) => {
-  User.findById(req.params.userId, (err, user) => {
+  const { userId, collectionId } = req.params;
+  User.findById(userId, (err, user) => {
     if (err) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
-      user.collections.pull({ _id: req.params.collectionId });
+      user.collections.pull({ _id: collectionId });
       user.save((err) => {
         if (err) {
           err.status = 400;
