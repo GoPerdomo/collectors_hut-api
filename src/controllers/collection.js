@@ -98,8 +98,19 @@ const deleteCollection = (req, res, next) => {
         if (err) {
           err.status = 400;
           next(err);
+        } else {
+          Item.find({ collectionId }, (err, items) => {
+            for (const item of items) {
+              Item.findByIdAndRemove(item._id, (err, deletedItem) => {
+                if (err) {
+                  err.status = 400;
+                  next(err);
+                }
+              });
+            }
+          })
+          res.status(200).json({});
         }
-        res.status(200).json({});
       });
     }
   });
