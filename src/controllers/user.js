@@ -107,7 +107,22 @@ const updateUser = (req, res, next) => {
       } else {
         const { password, email, ...newUser } = user._doc;
 
-        res.status(200).json(newUser);
+        Item.find({}, (err, items) => {
+          const { collections } = newUser;
+          const newCollections = [];
+
+          for (collection of collections) {
+            const collectionId = collection._id;
+            const collectionItems = items.filter(item => item.collectionId.toString() === collectionId.toString());
+
+            collection = collection.toObject();
+            collection.items = collectionItems;
+            newCollections.push(collection);
+          }
+
+          newUser.collections = newCollections;          
+          res.status(200).json(newUser);
+        });
       }
     });
   });
