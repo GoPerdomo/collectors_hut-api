@@ -1,24 +1,25 @@
 {
-  "name": "collectors-backend",
+  "name": "collectors_hut-api",
   "version": "1.0.0",
-  "description": "A social network for collectors",
-  "main": "server.js",
+  "description": "The API for the Collectors Hut",
+  "main": "./src/server.js",
   "scripts": {
     "start": "nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoPerdomo/collectors_backend.git"
+    "url": "git+https://github.com/GoPerdomo/collectors_hut-api.git"
   },
   "keywords": [
-    "social network"
+    "social network",
+    "collections"
   ],
-  "author": "Gabriel de O. Perdomo",
+  "author": "Gabriel Perdomo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GoPerdomo/collectors_backend/issues"
+    "url": "https://github.com/GoPerdomo/collectors_hut-api/issues"
   },
-  "homepage": "https://github.com/GoPerdomo/collectors_backend#readme",
+  "homepage": "https://github.com/GoPerdomo/collectors_hut-api/#readme",
   "dependencies": {
     "bcrypt": "^1.0.3",
     "cors": "^2.8.4",
