@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoPerdomo/collectors_backend.git"
+    "url": "git+https://github.com/GoPerdomo/collectors_hut-api.git"
   },
   "keywords": [
     "social network",
