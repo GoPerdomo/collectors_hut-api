@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const config = require('./config/config');
 const routes = require('./routes/index');
+
+// Config Vars
+const database = process.env.DATABASE;
+const port = process.env.PORT || 3030;
 
 // Use Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,7 +18,7 @@ app.use("/api", routes);
 // Use Middlewares
 
 // Connect to DB
-mongoose.connect(config.database, { useMongoClient: true });
+mongoose.connect(database, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 
@@ -42,7 +45,7 @@ app.use((err, req, res, next) => {
 // Error Handler
 
 // Listen to port
-app.listen(config.port, () => {
-  console.log(`Listening on port ${config.port}!`);
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
 // Listen to port

@@ -7,8 +7,10 @@ const collectionHandler = require('../controllers/collection');
 const itemHandler = require('../controllers/item');
 const search = require('../controllers/search');
 
-const config = require('../config/config');
 const userAuthorization = require('../middlewares');
+
+// Config Vars
+const secret = process.env.JWT_SECRET;
 
 
 // User Routes
@@ -18,29 +20,29 @@ router.post('/sign-up', userHandler.signUp);
 
 router.post('/sign-in', userHandler.signIn);
 
-router.put('/users/:userId', expressJWT({ secret: config.secret }), userAuthorization, userHandler.updateUser);
+router.put('/users/:userId', expressJWT({ secret }), userAuthorization, userHandler.updateUser);
 
-router.delete('/users/:userId', expressJWT({ secret: config.secret }), userAuthorization, userHandler.deleteUser);
+router.delete('/users/:userId', expressJWT({ secret }), userAuthorization, userHandler.deleteUser);
 // User Routes
 
 
 // Collection Routes
 router.get('/collections', collectionHandler.getAllCollections);
 
-router.post('/users/:userId/add-collection', expressJWT({ secret: config.secret }), userAuthorization, collectionHandler.createCollection);
+router.post('/users/:userId/add-collection', expressJWT({ secret }), userAuthorization, collectionHandler.createCollection);
 
-router.put('/users/:userId/collections/:collectionId', expressJWT({ secret: config.secret }), userAuthorization, collectionHandler.updateCollection);
+router.put('/users/:userId/collections/:collectionId', expressJWT({ secret }), userAuthorization, collectionHandler.updateCollection);
 
-router.delete('/users/:userId/collections/:collectionId', expressJWT({ secret: config.secret }), userAuthorization, collectionHandler.deleteCollection);
+router.delete('/users/:userId/collections/:collectionId', expressJWT({ secret }), userAuthorization, collectionHandler.deleteCollection);
 // Collection Routes
 
 
 // Item Routes
-router.post('/users/:userId/collections/:collectionId/add-item', expressJWT({ secret: config.secret }), userAuthorization, itemHandler.addItem);
+router.post('/users/:userId/collections/:collectionId/add-item', expressJWT({ secret }), userAuthorization, itemHandler.addItem);
 
-router.put('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret: config.secret }), userAuthorization, itemHandler.updateItem);
+router.put('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret }), userAuthorization, itemHandler.updateItem);
 
-router.delete('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret: config.secret }), userAuthorization, itemHandler.deleteItem);
+router.delete('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret }), userAuthorization, itemHandler.deleteItem);
 // Item Routes
 
 

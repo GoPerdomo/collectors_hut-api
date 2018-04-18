@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const config = require('../config/config');
 const User = require('../models/User');
 const Item = require('../models/Item');
 
+// Config Vars
+const secret = process.env.JWT_SECRET;
 
 const assignToken = (user) =>
   jwt.sign(
@@ -12,7 +13,7 @@ const assignToken = (user) =>
       firstName: user.firstName,
       lastName: user.lastName
     },
-    config.secret,
+    secret,
     {
       expiresIn: "1d"
     }
