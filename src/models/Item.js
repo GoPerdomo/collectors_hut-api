@@ -12,7 +12,7 @@ const itemSchema = mongoose.Schema({
   },
   photo: {
     type: String,
-    default: "https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/26195994_1683728821665390_2055593716814449098_n.jpg?oh=21be367da8c02511baad09b6cc40755f&oe=5AEFF4CA"
+    default: "http://res.cloudinary.com/goperdomo/image/upload/v1523835658/Collectors%20Hut/Assets/logo-vertical.png"
   },
   description: {
     type: String,
