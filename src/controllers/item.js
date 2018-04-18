@@ -22,6 +22,7 @@ const addItem = (req, res, next) => {
     photoType,
   } = req.body;
 
+  // Connects to AWS S3
   const s3 = new aws.S3();
   const s3Params = {
     Bucket: S3_BUCKET,
@@ -45,7 +46,6 @@ const addItem = (req, res, next) => {
     photo,
   });
 
-
   User.findById(userId, (err, user) => {
     if (err) {
       err = new Error("User not found");
@@ -57,7 +57,7 @@ const addItem = (req, res, next) => {
           err.status = 400;
           next(err);
         } else {
-          const signedUrl = s3.getSignedUrl('putObject', s3Params);
+          const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
           res.status(200).json({ item: newItem, signedUrl });
         }
       });
