@@ -123,16 +123,15 @@ const updateItem = (req, res, next) => {
 
 // Removes item from the DB
 const deleteItem = (req, res, next) => {
-  const { userId } = req.params;
-
   Item.findByIdAndRemove(req.params.itemId, (err, item) => {
-    const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
-
     if (err) {
       err = new Error("Item not found");
       err.status = 404;
       return next(err);
     } else {
+      const { userId } = req.params;
+      const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+
       s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
       res.status(200).json({});
     }

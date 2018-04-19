@@ -1,5 +1,14 @@
+const aws = require('aws-sdk');
+aws.config.region = 'eu-central-1';
+
 const User = require('../models/User');
 const Item = require('../models/Item');
+
+// Config Vars
+const S3_BUCKET = process.env.S3_BUCKET;
+
+// Connects to AWS S3
+const s3 = new aws.S3();
 
 
 // Fetches all users from the DB and sends only the collections
@@ -101,6 +110,9 @@ const deleteCollection = (req, res, next) => {
         } else {
           Item.find({ collectionId }, (err, items) => {
             for (const item of items) {
+              const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+
+              s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
               Item.findByIdAndRemove(item._id, (err, deletedItem) => {
                 if (err) {
                   err.status = 400;
