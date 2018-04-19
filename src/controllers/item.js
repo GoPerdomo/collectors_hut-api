@@ -10,6 +10,18 @@ const S3_BUCKET = process.env.S3_BUCKET;
 // Connects to AWS S3
 const s3 = new aws.S3();
 
+const setS3Params = (userId, photoType) => ({
+  Bucket: S3_BUCKET,
+  Key: `items/${userId}/${Date.now()}`,
+  ContentType: photoType,
+  Expires: 60,
+  ACL: 'public-read',
+});
+
+const setItemUrl = Key => (
+  `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${Key}`
+);
+
 // Adds a new item to the selected collection
 const addItem = (req, res, next) => {
   const { userId, collectionId } = req.params;
@@ -23,17 +35,8 @@ const addItem = (req, res, next) => {
     condition,
     photoType,
   } = req.body;
-
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: `${userId}-${Date.now()}`,
-    ContentType: photoType,
-    Expires: 60,
-    ACL: 'public-read',
-  };
-
-  const photo = photoType ? `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${s3Params.Key}` : undefined;
-
+  const s3Params = setS3Params(userId, photoType);
+  const photo = photoType ? setItemUrl(s3Params.Key) : undefined;
   const newItem = new Item({
     collectionId,
     name,
@@ -79,24 +82,18 @@ const updateItem = (req, res, next) => {
     condition,
     photoType,
   } = req.body;
+  const s3Params = setS3Params(userId, photoType);
 
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: `${userId}-${Date.now()}`,
-    ContentType: photoType,
-    Expires: 60,
-    ACL: 'public-read',
-  };
 
   Item.findById(req.params.itemId, (err, item) => {
     if (err) return next(err);
     if (!item) return next();
 
-    const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+    const prevPhoto = item.photo.slice(item.photo.indexOf(`items/${userId}`));
 
     item.name = name || item.name;
     item.description = description || item.description;
-    item.photo = photoType ? `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${s3Params.Key}` : item.photo;
+    item.photo = photoType ? setItemUrl(s3Params.Key) : item.photo;
     item.productionYear = productionYear || item.productionYear;
     item.acquisitionYear = acquisitionYear || item.acquisitionYear;
     item.origin = origin || item.origin;
@@ -130,7 +127,7 @@ const deleteItem = (req, res, next) => {
       return next(err);
     } else {
       const { userId } = req.params;
-      const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+      const prevPhoto = item.photo.slice(item.photo.indexOf(`items/${userId}`));
 
       s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
       res.status(200).json({});
