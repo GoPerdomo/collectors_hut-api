@@ -18,7 +18,7 @@ const setS3Params = (userId, photoType) => ({
   ACL: 'public-read',
 });
 
-const setItemUrl = Key => (
+const setPhotoUrl = Key => (
   `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${Key}`
 );
 
@@ -36,7 +36,7 @@ const addItem = (req, res, next) => {
     photoType,
   } = req.body;
   const s3Params = setS3Params(userId, photoType);
-  const photo = photoType ? setItemUrl(s3Params.Key) : undefined;
+  const photo = photoType ? setPhotoUrl(s3Params.Key) : undefined;
   const newItem = new Item({
     collectionId,
     name,
@@ -61,7 +61,7 @@ const addItem = (req, res, next) => {
           next(err);
         } else {
           const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
-          res.status(200).json({ item: newItem, signedUrl });
+          res.status(200).json({ data: newItem, signedUrl });
         }
       });
     }
@@ -93,7 +93,7 @@ const updateItem = (req, res, next) => {
 
     item.name = name || item.name;
     item.description = description || item.description;
-    item.photo = photoType ? setItemUrl(s3Params.Key) : item.photo;
+    item.photo = photoType ? setPhotoUrl(s3Params.Key) : item.photo;
     item.productionYear = productionYear || item.productionYear;
     item.acquisitionYear = acquisitionYear || item.acquisitionYear;
     item.origin = origin || item.origin;
@@ -111,7 +111,7 @@ const updateItem = (req, res, next) => {
           s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
         }
 
-        res.status(200).json({ item, signedUrl });
+        res.status(200).json({ data: item, signedUrl });
       }
     });
   });

@@ -1,3 +1,5 @@
+const aws = require('aws-sdk');
+aws.config.region = 'eu-central-1';
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
@@ -5,7 +7,24 @@ const Item = require('../models/Item');
 
 // Config Vars
 const secret = process.env.JWT_SECRET;
+const S3_BUCKET = process.env.S3_BUCKET;
 
+// Connects to AWS S3
+const s3 = new aws.S3();
+
+const setS3Params = (userId, photoType) => ({
+  Bucket: S3_BUCKET,
+  Key: `users/${userId}/${Date.now()}`,
+  ContentType: photoType,
+  Expires: 60,
+  ACL: 'public-read',
+});
+
+const setPhotoUrl = Key => (
+  `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${Key}`
+);
+
+// JTW
 const assignToken = (user) =>
   jwt.sign(
     {
@@ -90,14 +109,19 @@ const signIn = (req, res, next) => {
 
 // Modifies the user info and saves the changes to the DB
 const updateUser = (req, res, next) => {
-  const { firstName, lastName, photo, email, password } = req.body;
+  const { userId } = req.params;
+  const { firstName, lastName, email, password, photoType } = req.body;
+  const s3Params = setS3Params(userId, photoType);
 
   User.findById(req.params.userId, (err, user) => {
     if (err) return next(err);
     if (!user) return next();
+
+    const prevPhoto = user.photo.slice(user.photo.indexOf(`users/${userId}`));
+
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
-    user.photo = photo || user.photo;
+    user.photo = photoType ? setPhotoUrl(s3Params.Key) : user.photo;
     user.email = email || user.email;
     user.password = password || user.password;
 
@@ -107,6 +131,11 @@ const updateUser = (req, res, next) => {
         next(err);
       } else {
         const { password, email, ...newUser } = user._doc;
+        const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
+        
+        if (signedUrl) {
+          s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
+        }
 
         Item.find({}, (err, items) => {
           const { collections } = newUser;
@@ -121,8 +150,8 @@ const updateUser = (req, res, next) => {
             newCollections.push(collection);
           }
 
-          newUser.collections = newCollections;          
-          res.status(200).json(newUser);
+          newUser.collections = newCollections;
+          res.status(200).json({ data: newUser, signedUrl });
         });
       }
     });
