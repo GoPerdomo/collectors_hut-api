@@ -7,6 +7,8 @@ const Item = require('../models/Item');
 // Config Vars
 const S3_BUCKET = process.env.S3_BUCKET;
 
+// Connects to AWS S3
+const s3 = new aws.S3();
 
 // Adds a new item to the selected collection
 const addItem = (req, res, next) => {
@@ -22,8 +24,6 @@ const addItem = (req, res, next) => {
     photoType,
   } = req.body;
 
-  // Connects to AWS S3
-  const s3 = new aws.S3();
   const s3Params = {
     Bucket: S3_BUCKET,
     Key: `${userId}-${Date.now()}`,
@@ -80,8 +80,6 @@ const updateItem = (req, res, next) => {
     photoType,
   } = req.body;
 
-  // Connects to AWS S3
-  const s3 = new aws.S3();
   const s3Params = {
     Bucket: S3_BUCKET,
     Key: `${userId}-${Date.now()}`,
@@ -125,12 +123,17 @@ const updateItem = (req, res, next) => {
 
 // Removes item from the DB
 const deleteItem = (req, res, next) => {
+  const { userId } = req.params;
+
   Item.findByIdAndRemove(req.params.itemId, (err, item) => {
+    const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+
     if (err) {
       err = new Error("Item not found");
       err.status = 404;
       return next(err);
     } else {
+      s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
       res.status(200).json({});
     }
   });
