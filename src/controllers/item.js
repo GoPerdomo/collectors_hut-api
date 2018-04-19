@@ -1,6 +1,14 @@
+const aws = require('aws-sdk');
+aws.config.region = 'eu-central-1';
+
 const User = require('../models/User');
 const Item = require('../models/Item');
 
+// Config Vars
+const S3_BUCKET = process.env.S3_BUCKET;
+
+// Connects to AWS S3
+const s3 = new aws.S3();
 
 // Adds a new item to the selected collection
 const addItem = (req, res, next) => {
@@ -8,24 +16,34 @@ const addItem = (req, res, next) => {
   const {
     name,
     description,
-    photo,
-    productionYear,
-    acquisitionYear,
-    origin,
-    manufacturer,
-    condition
-  } = req.body;
-
-  const newItem = new Item({
-    collectionId,
-    name,
-    description,
-    photo,
     productionYear,
     acquisitionYear,
     origin,
     manufacturer,
     condition,
+    photoType,
+  } = req.body;
+
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: `${userId}-${Date.now()}`,
+    ContentType: photoType,
+    Expires: 60,
+    ACL: 'public-read',
+  };
+
+  const photo = photoType ? `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${s3Params.Key}` : undefined;
+
+  const newItem = new Item({
+    collectionId,
+    name,
+    description,
+    productionYear,
+    acquisitionYear,
+    origin,
+    manufacturer,
+    condition,
+    photo,
   });
 
   User.findById(userId, (err, user) => {
@@ -39,7 +57,8 @@ const addItem = (req, res, next) => {
           err.status = 400;
           next(err);
         } else {
-          res.status(200).json(newItem);
+          const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
+          res.status(200).json({ item: newItem, signedUrl });
         }
       });
     }
@@ -49,23 +68,35 @@ const addItem = (req, res, next) => {
 
 // Updates item and saves it
 const updateItem = (req, res, next) => {
+  const { userId } = req.params;
   const {
     name,
     description,
-    photo,
     productionYear,
     acquisitionYear,
     origin,
     manufacturer,
-    condition
+    condition,
+    photoType,
   } = req.body;
+
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: `${userId}-${Date.now()}`,
+    ContentType: photoType,
+    Expires: 60,
+    ACL: 'public-read',
+  };
 
   Item.findById(req.params.itemId, (err, item) => {
     if (err) return next(err);
     if (!item) return next();
+
+    const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+
     item.name = name || item.name;
     item.description = description || item.description;
-    item.photo = photo || item.photo;
+    item.photo = photoType ? `https://s3.${aws.config.region}.amazonaws.com/${S3_BUCKET}/${s3Params.Key}` : item.photo;
     item.productionYear = productionYear || item.productionYear;
     item.acquisitionYear = acquisitionYear || item.acquisitionYear;
     item.origin = origin || item.origin;
@@ -77,7 +108,13 @@ const updateItem = (req, res, next) => {
         err.status = 400;
         next(err);
       } else {
-        res.status(200).json(item);
+        const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
+
+        if (signedUrl) {
+          s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
+        }
+
+        res.status(200).json({ item, signedUrl });
       }
     });
   });
@@ -92,6 +129,10 @@ const deleteItem = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
+      const { userId } = req.params;
+      const prevPhoto = item.photo.slice(item.photo.indexOf(userId));
+
+      s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
       res.status(200).json({});
     }
   });
