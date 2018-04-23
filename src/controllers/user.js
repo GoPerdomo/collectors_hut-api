@@ -1,6 +1,7 @@
 const aws = require('aws-sdk');
 aws.config.region = 'eu-central-1';
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
 const Item = require('../models/Item');
@@ -80,10 +81,10 @@ const signUp = (req, res, next) => {
     password: password
   });
 
-  newUser.save((err) => {
+  newUser.save(newUser, (err) => {
     if (err) {
       err = new Error('Email already in use');
-      err.status = 409;      
+      err.status = 409;
       next(err);
     } else {
       const token = assignToken(newUser);
@@ -95,14 +96,23 @@ const signUp = (req, res, next) => {
 
 // Authenticates the user
 const signIn = (req, res, next) => {
-  User.findOne({ email: req.body.email }, (err, user) => {
-    if (err || !user || req.body.password !== user.password) {
+  const { email, password } = req.body;
+
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) {
       err = new Error('Wrong email or password');
-      err.status = 401;      
+      err.status = 401;
       return next(err);
     } else {
-      const token = assignToken(user);
-      res.status(200).json({ userId: user._id, token });
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err || !result) {
+          err = new Error('Wrong email or password');
+          err.status = 401;
+          return next(err);
+        }
+        const token = assignToken(user);
+        res.status(200).json({ userId: user._id, token });
+      })
     }
   });
 }
@@ -126,14 +136,14 @@ const updateUser = (req, res, next) => {
     user.email = email || user.email;
     user.password = password || user.password;
 
-    user.save((err) => {
+    user.save(user, (err) => {
       if (err) {
         err.status = 400;
         next(err);
       } else {
         const { password, email, ...newUser } = user._doc;
         const signedUrl = photoType ? s3.getSignedUrl('putObject', s3Params) : null;
-        
+
         if (signedUrl) {
           s3.deleteObject({ Bucket: S3_BUCKET, Key: prevPhoto }, (err, data) => data);
         }

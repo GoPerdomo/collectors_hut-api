@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+
+const hashPassword = require('../middlewares').hashPassword;
 
 const Collection = require('./Collection');
 
@@ -32,6 +33,7 @@ const userSchema = mongoose.Schema({
   }
 });
 
+userSchema.pre('save', hashPassword);
 
 const User = mongoose.model('User', userSchema);
 

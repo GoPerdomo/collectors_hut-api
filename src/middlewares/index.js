@@ -1,13 +1,26 @@
+const bcrypt = require('bcrypt');
+
 // Checks if the user id stored in the token equals to the one in the params
 const userAuthorization = (req, res, next) => {
   if (req.user._id === req.params.userId) {
-    next();
+    return next();
   } else {
     err = new Error('Unauthorized');
     err.status = 401;
     return next(err);
   }
-}
-// Checks if the user id stored in the token equals to the one in the params
+};
 
-module.exports = userAuthorization;
+// Hash password before saving to database
+const hashPassword = (next, user) => {
+  bcrypt.hash(user.password, 10, (err, hash) => {
+    if (err) return next(err);
+    user.password = hash;
+    next();
+  })
+};
+
+module.exports = {
+  userAuthorization,
+  hashPassword
+};

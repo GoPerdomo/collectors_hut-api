@@ -7,7 +7,7 @@ const collectionHandler = require('../controllers/collection');
 const itemHandler = require('../controllers/item');
 const search = require('../controllers/search');
 
-const userAuthorization = require('../middlewares');
+const userAuthorization = require('../middlewares').userAuthorization;
 
 // Config Vars
 const secret = process.env.JWT_SECRET;
