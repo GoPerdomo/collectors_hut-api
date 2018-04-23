@@ -38,9 +38,8 @@ app.use((req, res, next) => {
 
 // Error Handler
 app.use((err, req, res, next) => {
-  if (err.status === undefined) err.status = 500;
-  res.locals.error = err;
-  res.status(err.status).json(err.message);
+  if (!err.status) err.status = 500;
+  res.status(err.status).json({ message: err.message });
 });
 // Error Handler
 
