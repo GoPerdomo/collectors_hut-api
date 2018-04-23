@@ -82,7 +82,8 @@ const signUp = (req, res, next) => {
 
   newUser.save((err) => {
     if (err) {
-      err.status = 400;
+      err = new Error('Email already in use');
+      err.status = 409;      
       next(err);
     } else {
       const token = assignToken(newUser);
@@ -97,7 +98,7 @@ const signIn = (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (err || !user || req.body.password !== user.password) {
       err = new Error('Wrong email or password');
-      err.status = 401;
+      err.status = 401;      
       return next(err);
     } else {
       const token = assignToken(user);
