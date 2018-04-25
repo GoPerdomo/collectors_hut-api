@@ -12,11 +12,13 @@ const userAuthorization = (req, res, next) => {
 };
 
 // Hash password before saving to database
-const hashPassword = (next, user) => {
+const hashPassword = (next, user, err) => {
+  if (!user.password) return next();
+  
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) return next(err);
     user.password = hash;
-    next();
+    return next();
   })
 };
 
