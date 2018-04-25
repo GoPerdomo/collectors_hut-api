@@ -43,7 +43,7 @@ const createCollection = (req, res, next) => {
       return next(err);
     } else {
       user.collections.push({ name, info });
-      user.save((err) => {
+      user.save(user, (err) => {
         if (err) {
           err.status = 400;
           return next(err);
@@ -80,7 +80,7 @@ const updateCollection = (req, res, next) => {
       } else {
         selectedCollection.name = name || selectedCollection.name;
         selectedCollection.info = info || selectedCollection.info;
-        user.save((err) => {
+        user.save(user, (err) => {
           if (err) {
             err.status = 400;
             next(err);
@@ -103,7 +103,7 @@ const deleteCollection = (req, res, next) => {
       return next(err);
     } else {
       user.collections.pull({ _id: collectionId });
-      user.save((err) => {
+      user.save(user, (err) => {
         if (err) {
           err.status = 400;
           next(err);

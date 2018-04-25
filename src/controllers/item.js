@@ -55,7 +55,7 @@ const addItem = (req, res, next) => {
       err.status = 404;
       return next(err);
     } else {
-      newItem.save((err) => {
+      newItem.save(newItem, (err) => {
         if (err) {
           err.status = 400;
           next(err);
@@ -100,7 +100,7 @@ const updateItem = (req, res, next) => {
     item.manufacturer = manufacturer || item.manufacturer;
     item.condition = condition || item.condition;
 
-    item.save((err) => {
+    item.save(item, (err) => {
       if (err) {
         err.status = 400;
         next(err);
