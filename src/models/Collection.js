@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const Collection = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 20,
   },
   info: {
     type: String,
-    default: ""
+    default: "",
+    maxlength: 1500,
   }
 });
 
