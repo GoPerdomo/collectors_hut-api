@@ -83,8 +83,10 @@ const signUp = (req, res, next) => {
 
   newUser.save(newUser, (err) => {
     if (err) {
-      err = new Error('Email already in use');
-      err.status = 409;
+      if (err.name === 'MongoError') {
+        err = new Error('Email already in use');
+        err.status = 409;
+      }
       next(err);
     } else {
       const token = assignToken(newUser);
@@ -103,7 +105,7 @@ const signIn = (req, res, next) => {
       err = new Error('Wrong email or password');
       err.status = 401;
       return next(err);
-    } else {
+    } else {      
       bcrypt.compare(password, user.password, (err, result) => {
         if (err || !result) {
           err = new Error('Wrong email or password');

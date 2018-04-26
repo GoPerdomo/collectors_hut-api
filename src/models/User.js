@@ -7,25 +7,29 @@ const Collection = require('./Collection');
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 20,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 20,
   },
   photo: {
     type: String,
-    default: "http://www.atwoodz.com/wp-content/uploads/2013/08/question-mark.jpe"
+    default: "http://res.cloudinary.com/goperdomo/image/upload/v1524761916/Collectors%20Hut/Assets/user.png"
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    trim: true
+    trim: true,
+    maxlength: 255,
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    minlength: 8,
   },
   collections: {
     type: [Collection],

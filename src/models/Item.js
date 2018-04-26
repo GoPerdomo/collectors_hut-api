@@ -8,7 +8,8 @@ const itemSchema = mongoose.Schema({
   },
   name: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 100,
   },
   photo: {
     type: String,
@@ -16,18 +17,23 @@ const itemSchema = mongoose.Schema({
   },
   description: {
     type: String,
+    maxlength: 1500,
   },
   productionYear: {
     type: Number,
+    max: 9999,
   },
   acquisitionYear: {
     type: Number,
+    max: 9999,
   },
   origin: {
     type: String,
+    maxlength: 100,
   },
   manufacturer: {
     type: String,
+    maxlength: 100,
   },
   condition: {
     type: String,
