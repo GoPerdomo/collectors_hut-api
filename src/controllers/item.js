@@ -67,7 +67,6 @@ const addItem = (req, res, next) => {
     }
   });
 };
-// Adds a new item to the selected collection
 
 // Updates item and saves it
 const updateItem = (req, res, next) => {
@@ -116,7 +115,6 @@ const updateItem = (req, res, next) => {
     });
   });
 };
-// Updates item and saves it
 
 // Removes item from the DB
 const deleteItem = (req, res, next) => {
@@ -134,8 +132,6 @@ const deleteItem = (req, res, next) => {
     }
   });
 };
-// Removes item from the DB
-
 
 module.exports = {
   addItem,

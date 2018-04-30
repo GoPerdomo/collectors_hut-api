@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api", routes);
-// Use Middlewares
 
 // Connect to DB
 mongoose.connect(database, { useMongoClient: true });
@@ -26,7 +25,6 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => {
   console.log('Connected to the database');
 });
-// Connect to DB
 
 // Catch 404 Error
 app.use((req, res, next) => {
@@ -34,17 +32,14 @@ app.use((req, res, next) => {
   err.status = 404;
   next(err);
 });
-// Catch 404 Error
 
 // Error Handler
 app.use((err, req, res, next) => {
   if (!err.status) err.status = 500;
   res.status(err.status).json({ message: err.message });
 });
-// Error Handler
 
 // Listen to port
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-// Listen to port

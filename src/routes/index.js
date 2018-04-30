@@ -6,6 +6,7 @@ const userHandler = require('../controllers/user');
 const collectionHandler = require('../controllers/collection');
 const itemHandler = require('../controllers/item');
 const search = require('../controllers/search');
+const contact = require('../controllers/contact');
 
 const userAuthorization = require('../middlewares').userAuthorization;
 
@@ -23,7 +24,6 @@ router.post('/sign-in', userHandler.signIn);
 router.put('/users/:userId', expressJWT({ secret }), userAuthorization, userHandler.updateUser);
 
 router.delete('/users/:userId', expressJWT({ secret }), userAuthorization, userHandler.deleteUser);
-// User Routes
 
 
 // Collection Routes
@@ -34,7 +34,6 @@ router.post('/users/:userId/add-collection', expressJWT({ secret }), userAuthori
 router.put('/users/:userId/collections/:collectionId', expressJWT({ secret }), userAuthorization, collectionHandler.updateCollection);
 
 router.delete('/users/:userId/collections/:collectionId', expressJWT({ secret }), userAuthorization, collectionHandler.deleteCollection);
-// Collection Routes
 
 
 // Item Routes
@@ -43,11 +42,11 @@ router.post('/users/:userId/collections/:collectionId/add-item', expressJWT({ se
 router.put('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret }), userAuthorization, itemHandler.updateItem);
 
 router.delete('/users/:userId/collections/:collectionId/items/:itemId', expressJWT({ secret }), userAuthorization, itemHandler.deleteItem);
-// Item Routes
 
 
-// Search Route
+// Other Routes
 router.get('/search', search);
-// Search Route
+router.post('/contact', contact)
+
 
 module.exports = router;
