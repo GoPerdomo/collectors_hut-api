@@ -29,7 +29,6 @@ const getAllCollections = (req, res, next) => {
     }
   });
 };
-// Fetches all users from the DB and sends only the collections
 
 // Creates a new collection and assigns it to the user
 const createCollection = (req, res, next) => {
@@ -59,7 +58,6 @@ const createCollection = (req, res, next) => {
     }
   });
 };
-// Creates a new collection and assigns it to the user
 
 // Finds user and updates the selected collection
 const updateCollection = (req, res, next) => {
@@ -91,7 +89,6 @@ const updateCollection = (req, res, next) => {
     }
   });
 };
-// Finds user and updates the selected collection
 
 // Finds user and deletes selected collection
 const deleteCollection = (req, res, next) => {
@@ -127,8 +124,6 @@ const deleteCollection = (req, res, next) => {
     }
   });
 };
-// Finds user and deletes selected collection
-
 
 module.exports = {
   getAllCollections,

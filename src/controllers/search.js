@@ -27,7 +27,6 @@ const search = (req, res, next) => {
       }
     });
   }
-  // Search for user
 
   // Search for collection
   if (collectionQuery) {
@@ -51,7 +50,6 @@ const search = (req, res, next) => {
       }
     });
   }
-  // Search for collection
 };
 
 module.exports = search;
