@@ -6,7 +6,7 @@ const userHandler = require('../controllers/user');
 const collectionHandler = require('../controllers/collection');
 const itemHandler = require('../controllers/item');
 const search = require('../controllers/search');
-const contact = require('../controllers/contact');
+const others = require('../controllers/others');
 
 const userAuthorization = require('../middlewares').userAuthorization;
 
@@ -46,7 +46,8 @@ router.delete('/users/:userId/collections/:collectionId/items/:itemId', expressJ
 
 // Other Routes
 router.get('/search', search);
-router.post('/contact', contact)
+router.post('/contact', others.contact);
+router.post('/newsletter', others.newsletter);
 
 
 module.exports = router;
