@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/GoPerdomo/collectors_hut-api/#readme",
   "dependencies": {
-    "aws-sdk": "^2.229.1",
+    "aws-sdk": "^2.232.1",
     "bcrypt": "^1.0.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
