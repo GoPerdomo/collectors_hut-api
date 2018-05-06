@@ -50,7 +50,7 @@ const addItem = (req, res, next) => {
   });
 
   User.findById(userId, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
@@ -100,7 +100,7 @@ const updateItem = (req, res, next) => {
     item.condition = condition || item.condition;
 
     item.save(err => {
-      if (err) {
+      if (err || !item) {
         err.status = 400;
         next(err);
       } else {
@@ -119,7 +119,7 @@ const updateItem = (req, res, next) => {
 // Removes item from the DB
 const deleteItem = (req, res, next) => {
   Item.findByIdAndRemove(req.params.itemId, (err, item) => {
-    if (err) {
+    if (err || !item) {
       err = new Error("Item not found");
       err.status = 404;
       return next(err);

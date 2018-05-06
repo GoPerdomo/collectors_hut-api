@@ -36,14 +36,14 @@ const createCollection = (req, res, next) => {
   const { name, info } = req.body;
 
   User.findById(userId, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
       user.collections.push({ name, info });
       user.save(err => {
-        if (err) {
+        if (err || !user) {
           err.status = 400;
           return next(err);
         } else {
@@ -65,7 +65,7 @@ const updateCollection = (req, res, next) => {
   const { name, info } = req.body;
 
   User.findById(userId, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
@@ -79,7 +79,7 @@ const updateCollection = (req, res, next) => {
         selectedCollection.name = name || selectedCollection.name;
         selectedCollection.info = info || selectedCollection.info;
         user.save(err => {
-          if (err) {
+          if (err || !user) {
             err.status = 400;
             next(err);
           }
@@ -94,14 +94,14 @@ const updateCollection = (req, res, next) => {
 const deleteCollection = (req, res, next) => {
   const { userId, collectionId } = req.params;
   User.findById(userId, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
     } else {
       user.collections.pull({ _id: collectionId });
       user.save(err => {
-        if (err) {
+        if (err || !user) {
           err.status = 400;
           next(err);
         } else {

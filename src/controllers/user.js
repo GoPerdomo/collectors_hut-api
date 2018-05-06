@@ -43,7 +43,7 @@ const assignToken = (user) =>
 // Fetches user from the DB
 const getUser = (req, res, next) => {
   User.findById(req.params.userId, { password: 0, email: 0 }, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
@@ -82,7 +82,7 @@ const signUp = (req, res, next) => {
   });
 
   newUser.save(newUser, (err) => {
-    if (err) {
+    if (err || !newUser) {
       if (err.name === 'MongoError') {
         err = new Error('Email already in use');
         err.status = 409;
@@ -139,7 +139,7 @@ const updateUser = (req, res, next) => {
     user.password = password || user.password;
 
     user.save(user, (err) => {
-      if (err) {
+      if (err || !user) {
         err.status = 400;
         next(err);
       } else {
@@ -175,7 +175,7 @@ const updateUser = (req, res, next) => {
 // Removes user from the DB
 const deleteUser = (req, res, next) => {
   User.findByIdAndRemove(req.params.userId, (err, user) => {
-    if (err) {
+    if (err || !user) {
       err = new Error("User not found");
       err.status = 404;
       return next(err);
