@@ -7,15 +7,16 @@ const search = (req, res, next) => {
 
   // Search for user
   if (userQuery) {
-    const search = new RegExp(userQuery, "i");
+    const searchArray = userQuery.split(" ").map(search => new RegExp(search, "i"));
+
     User.find({
       $or: [
-        { firstName: search },
-        { lastName: search }
+        { firstName: { $in: searchArray } },
+        { lastName: { $in: searchArray } },
       ]
     }, (err, users) => {
       if (err) {
-        err = new Error("User not found");
+        err = new Error("No users found");
         err.status = 404;
         return next(err);
       } else {
@@ -34,7 +35,7 @@ const search = (req, res, next) => {
 
     User.find({ collections: { $elemMatch: { name: search } } }, (err, users) => {
       if (err) {
-        err = new Error("User not found");
+        err = new Error("No collections found");
         err.status = 404;
         return next(err);
       } else {
